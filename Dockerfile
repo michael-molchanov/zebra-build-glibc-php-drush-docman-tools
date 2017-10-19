@@ -14,8 +14,7 @@ RUN apt-get update \
   && curl -L https://get.rvm.io | bash -s stable \
   && /bin/bash -l -c "rvm install 2.3.0" \
   && /bin/bash -l -c "rvm --default use 2.3.0" \
-  && /bin/bash -l -c "gem install specific_install" \
-  && /bin/bash -l -c "gem specific_install https://github.com/Adyax/docman.git develop" \
+  && /bin/bash -l -c "gem install -v 0.0.81 docman" \
   && rm -rf /var/lib/apt/lists/*
 
 # Install nodejs & grunt.
