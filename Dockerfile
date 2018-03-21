@@ -7,6 +7,9 @@ RUN mkdir -p /root/.ssh
 ADD config/ssh /root/.ssh/config
 RUN chown root:root /root/.ssh/config && chmod 600 /root/.ssh/config
 
+# Add composer downloads optimisation.
+RUN composer global require hirak/prestissimo
+
 # Install rvm, ruby & docman.
 RUN apt-get update \
   && apt-get -y install wget curl libfontconfig1 procps \
