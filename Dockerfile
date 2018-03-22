@@ -17,7 +17,7 @@ RUN apt-get update \
   && curl -L https://get.rvm.io | bash -s stable \
   && /bin/bash -l -c "rvm install 2.3.0" \
   && /bin/bash -l -c "rvm --default use 2.3.0" \
-  && /bin/bash -l -c "gem install -v 0.0.92 docman" \
+  && /bin/bash -l -c "gem install -v 0.0.94 docman" \
   && rm -rf /var/lib/apt/lists/*
 
 # Install nodejs & grunt.
