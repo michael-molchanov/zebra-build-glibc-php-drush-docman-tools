@@ -28,9 +28,10 @@ RUN curl -sL https://deb.nodesource.com/setup_8.x | bash - \
   && apt-get update \
   && apt-get install -y nodejs yarn \
   && rm -rf /var/lib/apt/lists/* \
-  && npm install -g gulp-cli grunt-cli \
+  && npm install -g gulp-cli grunt-cli bower \
   && grunt --version \
   && gulp --version \
+  && bower --version \
   && yarn versions
 
 # Install compass.
