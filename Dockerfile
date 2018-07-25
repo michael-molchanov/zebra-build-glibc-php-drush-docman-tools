@@ -1,4 +1,4 @@
-FROM drush/drush:8
+FROM ubuntu:16.04
 
 USER root
 
@@ -7,17 +7,66 @@ RUN mkdir -p /root/.ssh
 ADD config/ssh /root/.ssh/config
 RUN chown root:root /root/.ssh/config && chmod 600 /root/.ssh/config
 
+# Install base.
+RUN apt-get update \
+  && apt-get -y install \
+  bash \
+  build-essential \
+  curl \
+  language-pack-en-base \
+  openssl \
+  procps \
+  software-properties-common \
+  wget \
+  && locale-gen en_US.UTF-8 \
+  && rm -rf /var/lib/apt/lists/*
+
+ENV LC_ALL=en_US.UTF-8
+ENV LANG=en_US.UTF-8
+
+RUN add-apt-repository ppa:ondrej/php \
+  && apt-get update \
+  && apt-get -y install \
+  php-cli \
+  php-bcmath \
+  php-bz2 \
+  php-curl \
+  php-dev \
+  php-gd \
+  php-gettext \
+  php-gmp \
+  php-imagick \
+  php-intl \
+  php-json \
+  php-mbstring \
+  php-pear \
+  php-pspell \
+  php-readline \
+  php-recode \
+  php-tidy \
+  php-xml \
+  php-xmlrpc \
+  php-zip \
+  && rm -rf /var/lib/apt/lists/*
+
+# Add composer.
+RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
+  && php -r "if (hash_file('SHA384', 'composer-setup.php') === '544e09ee996cdf60ece3804abc52599c22b1f40f4323403c44d44fdfdd586475ca9813a858088ffbc1f233e9b180f061') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;" \
+  && php composer-setup.php \
+  && php -r "unlink('composer-setup.php');" \
+  && mv composer.phar /usr/local/bin/composer \
+  && chmod +x /usr/local/bin/composer
+
 # Add composer downloads optimisation.
 RUN composer global require hirak/prestissimo
 
+RUN composer global require drush/drush:^8.1.0
+
 # Install rvm, ruby & docman.
 RUN apt-get update \
-  && apt-get -y install wget curl libfontconfig1 procps \
-  && gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 \
-  && curl -L https://get.rvm.io | bash -s stable \
-  && /bin/bash -l -c "rvm install 2.3.0" \
-  && /bin/bash -l -c "rvm --default use 2.3.0" \
-  && /bin/bash -l -c "gem install -v 0.0.98 docman" \
+  && apt-get -y install \
+  ruby-full \
+  && gem install -v 0.0.98 docman \
   && rm -rf /var/lib/apt/lists/*
 
 # Install nodejs & grunt.
@@ -34,4 +83,4 @@ RUN curl -sL https://deb.nodesource.com/setup_8.x | bash - \
   && yarn versions
 
 # Install compass.
-RUN /bin/bash -l -c "gem install compass"
+RUN gem install compass
