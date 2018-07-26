@@ -13,6 +13,7 @@ RUN apt-get update \
   bash \
   build-essential \
   curl \
+  git-core \
   language-pack-en-base \
   openssl \
   procps \
