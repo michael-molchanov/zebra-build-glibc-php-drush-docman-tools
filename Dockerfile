@@ -66,7 +66,7 @@ RUN composer global require drush/drush:^8.2.3
 RUN apt-get update \
   && apt-get -y install \
   ruby-full \
-  && gem install -v 0.0.101 docman \
+  && gem install -v 0.0.102 docman \
   && rm -rf /var/lib/apt/lists/*
 
 # Install nodejs & grunt.
