@@ -1,4 +1,4 @@
-FROM ubuntu:16.04
+FROM ubuntu:18.04
 
 USER root
 
@@ -6,6 +6,9 @@ USER root
 RUN mkdir -p /root/.ssh
 ADD config/ssh /root/.ssh/config
 RUN chown root:root /root/.ssh/config && chmod 600 /root/.ssh/config
+
+ENV DEBIAN_FRONTEND=noninteractive
+ENV TZ=Etc/UTC
 
 # Install base.
 RUN apt-get update \
@@ -43,7 +46,6 @@ RUN add-apt-repository ppa:ondrej/php \
   php-pear \
   php-pspell \
   php-readline \
-  php-recode \
   php-tidy \
   php-xml \
   php-xmlrpc \
@@ -60,17 +62,17 @@ RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
 # Add composer downloads optimisation.
 RUN composer global require hirak/prestissimo
 
-RUN composer global require drush/drush:^8.2.3
+RUN composer global require drush/drush:^8.3.0
 
 # Install rvm, ruby & docman.
 RUN apt-get update \
   && apt-get -y install \
   ruby-full \
-  && gem install -v 0.0.105 docman \
+  && gem install -v 0.0.107 docman \
   && rm -rf /var/lib/apt/lists/*
 
 # Install nodejs & grunt.
-RUN curl -sL https://deb.nodesource.com/setup_6.x | bash - \
+RUN curl -sL https://deb.nodesource.com/setup_10.x | bash - \
   && curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \
   && echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list \
   && apt-get update \
