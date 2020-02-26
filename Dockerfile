@@ -20,6 +20,7 @@ RUN apt-get update \
   language-pack-en-base \
   openssl \
   procps \
+  rsync \
   software-properties-common \
   wget \
   && locale-gen en_US.UTF-8 \
